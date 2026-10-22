@@ -2,7 +2,7 @@
   "name": "Canvas Pakhal",
   "slug": "canvas-pakhal",
   "description": "Browse canvas pakhal and message us about custom orders, sizes, and availability.",
-  "bannerImage": "assets/images/categories/category-banner.svg",
+  "bannerImage": "assets/images/categories/canvas-pakhal/banner.svg",
   "home": {
     "image": "assets/images/home/canvas-pakhal.svg",
     "imageAlt": "Canvas pakhal made for practical use",

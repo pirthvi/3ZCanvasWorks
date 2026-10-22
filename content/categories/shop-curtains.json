@@ -2,7 +2,7 @@
   "name": "Shop Curtains",
   "slug": "shop-curtains",
   "description": "Browse roll-up canvas curtains and practical covers for shop fronts.",
-  "bannerImage": "assets/images/categories/category-banner.svg",
+  "bannerImage": "assets/images/categories/shop-curtains/banner.svg",
   "home": {
     "image": "assets/images/home/shop-curtains.svg",
     "imageAlt": "Canvas curtains fitted across a shop front",

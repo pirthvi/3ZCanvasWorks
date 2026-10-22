@@ -2,7 +2,7 @@
   "name": "Bags",
   "slug": "bags",
   "description": "Browse our canvas bags. Message us if you need a size, specification, or option that isn’t listed.",
-  "bannerImage": "assets/images/categories/category-banner.svg",
+  "bannerImage": "assets/images/categories/bags/banner.svg",
   "home": {
     "image": "assets/images/home/bags.svg",
     "imageAlt": "Canvas bags made for everyday use",

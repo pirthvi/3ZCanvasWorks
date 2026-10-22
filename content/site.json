@@ -1,7 +1,7 @@
 {
   "themeColor": "#f4eee4",
   "htmlLanguage": "en",
-  "logoImage": "assets/images/brand/logor.svg",
+  "logoImage": "assets/images/brand/header-logo.svg",
   "footerLogoImage": "assets/images/brand/logo-light.svg",
   "faviconImage": "assets/images/brand/favicon.svg",
   "shopName": "3Z Canvas Works",
@@ -12,7 +12,7 @@
   "locale": "en-PK",
   "contactEmail": "",
   "city": "",
-  "announcement": "Quality you can trust · Direct orders on WhatsApp",
+  "announcement": "Welcome to 3Z Canvas Works! We accept custom orders and deliver across Pakistan. Place your order on WhatsApp: {whatsappNumber}.",
   "deliveryNote": "Delivery charges and availability are confirmed when we reply to your WhatsApp order.",
   "header": {
     "homeLinkLabel": "{shopName} home",

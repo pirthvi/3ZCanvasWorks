@@ -22,13 +22,15 @@ The browser reads the generated `site-data.js` bundle. The editable source of al
 
 - `assets/images/brand/`: header/footer logo and favicon.
 - `assets/images/home/`: homepage carousel and category-tile artwork.
-- `assets/images/categories/`: category listing-page banner artwork.
+- `assets/images/categories/<category-slug>/`: each category’s own banner image (`banner.svg` by default).
 - `assets/images/products/<category>/`: individual product images used by both the product listing card and product detail page.
 - `assets/images/shared/`: ornamental frame used across pages.
 
 Image paths in JSON identify the image by its filename; the update script finds that filename with a supported browser image extension. You can replace `heavy-duty-canvas-bag.svg` with `heavy-duty-canvas-bag.jpg` in the same folder and leave the JSON unchanged. Supported formats include JPG/JPEG, PNG, WebP, AVIF, APNG, GIF, BMP, ICO, and SVG. If more than one format with the same filename is present, the script prefers WebP, AVIF, JPG, JPEG, PNG, APNG, GIF, BMP, ICO, then SVG. To choose a specific format, keep only that file with the image’s filename.
 
-Product image files live under `assets/images/products/<category>/`; their JSON image paths are relative to that product’s folder. Category, banner, and logo image files are also in `assets/images/`, while their JSON paths are relative to the project root. After replacing an image, double-click `Update Site Data.bat` so the static bundle points to the selected file.
+Product image files live under `assets/images/products/<category>/`; their JSON image paths are relative to that product’s folder. Category banner and logo paths in content JSON are relative to the project root. Replace a category’s `banner.svg` with `banner.jpg` or `banner.webp` in that category’s folder; the JSON can stay unchanged. After replacing an image, double-click `Update Site Data.bat` so the static bundle points to the selected file.
+
+For category banners, use a wide landscape image around **1920 × 600 px** (minimum **1200 × 375 px**). The category hero uses `cover`, so it crops the image differently on desktop and mobile. Keep the main subject near the centre, leave the left side relatively uncluttered because category text overlays it, and do not include text or a logo in the image.
 
 Keep the homepage image subject near the centre because carousel slides and category tiles crop the image to different shapes. A product uses one main image on both its card and detail page.
 
