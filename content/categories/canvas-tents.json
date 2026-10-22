@@ -2,7 +2,7 @@
   "name": "Canvas Tents",
   "slug": "canvas-tents",
   "description": "Browse canvas tents and shelters for outdoor work, travel, and gathering.",
-  "bannerImage": "assets/images/categories/category-banner.svg",
+  "bannerImage": "assets/images/categories/canvas-tents/banner.svg",
   "home": {
     "image": "assets/images/home/canvas-tents.svg",
     "imageAlt": "Canvas tent set up outdoors",
