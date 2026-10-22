@@ -1,0 +1,15 @@
+{
+  "metaTitle": "{product} — {shopName}",
+  "homeBreadcrumb": "Home",
+  "detailsHeading": "Product details",
+  "detailsFallback": "Contact us for specifications and availability.",
+  "availability": "Availability and delivery confirmed on WhatsApp",
+  "quantityLabel": "Qty",
+  "addToCart": "Add to cart",
+  "askAboutTemplate": "Ask about {product} on WhatsApp",
+  "whatsappQuestionTemplate": "Hello, I have a question about {product}.",
+  "deliveryHeading": "Delivery & payment",
+  "paymentNote": "Payment terms can be confirmed in chat.",
+  "relatedKicker": "More to explore",
+  "relatedHeading": "From the same collection"
+}

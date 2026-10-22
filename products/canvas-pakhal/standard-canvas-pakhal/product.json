@@ -1,0 +1,12 @@
+{
+  "id": "standard-canvas-pakhal",
+  "name": "Canvas Pakhal — Standard",
+  "category": "Canvas Pakhal",
+  "price": 5900,
+  "description": "A sample canvas pakhal listing. Add your exact style, capacity, and product notes.",
+  "details": "Sample listing · Add dimensions, capacity, construction, and final price.",
+  "image": "../../../assets/images/products/canvas-pakhal/standard-canvas-pakhal.svg",
+  "skuLabel": "· ",
+  "sku": "PAK-001",
+  "featured": true
+}

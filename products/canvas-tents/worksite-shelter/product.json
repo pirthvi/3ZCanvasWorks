@@ -1,0 +1,12 @@
+{
+  "id": "worksite-shelter",
+  "name": "Canvas Worksite Shelter",
+  "category": "Canvas Tents",
+  "price": 36500,
+  "description": "A sample canvas shelter listing for temporary shade at a worksite or outdoor event.",
+  "details": "Sample listing · Add dimensions, fabric weight, frame details, and final price.",
+  "image": "../../../assets/images/products/canvas-tents/worksite-shelter.svg",
+  "skuLabel": "· ",
+  "sku": "TEN-002",
+  "featured": false
+}

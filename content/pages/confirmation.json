@@ -1,0 +1,11 @@
+{
+  "metaTitle": "Order request — {shopName}",
+  "metaDescription": "Your order request has been prepared for WhatsApp confirmation.",
+  "kicker": "Order record downloaded",
+  "title": "Thanks, {name}.",
+  "intro": "Order {orderId} was downloaded as a JSON file. A copy is also kept in this browser when browser storage is available. WhatsApp should open with the order details. Send the message to complete your request.",
+  "subtotal": "Order subtotal",
+  "whatsappButton": "Open WhatsApp order",
+  "continueShopping": "Continue shopping",
+  "footnote": "The order is confirmed after you send the WhatsApp message and the shop replies."
+}

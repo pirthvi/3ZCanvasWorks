@@ -1,0 +1,12 @@
+{
+  "id": "canvas-tool-bag",
+  "name": "Canvas Tool Bag",
+  "category": "Bags",
+  "price": 2750,
+  "description": "A practical canvas bag for keeping tools and daily essentials together.",
+  "details": "Sample listing · Add exact dimensions, pockets, fabric, and final price.",
+  "image": "../../../assets/images/products/bags/canvas-tool-bag.svg",
+  "skuLabel": "· ",
+  "sku": "BAG-002",
+  "featured": false
+}

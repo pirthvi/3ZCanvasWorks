@@ -1,0 +1,15 @@
+{
+  "name": "Bags",
+  "slug": "bags",
+  "description": "Browse our canvas bags. Message us if you need a size, specification, or option that isn’t listed.",
+  "bannerImage": "assets/images/categories/category-banner.svg",
+  "home": {
+    "image": "assets/images/home/bags.svg",
+    "imageAlt": "Canvas bags made for everyday use",
+    "title": "Canvas bags",
+    "accent": "made to carry on.",
+    "description": "Strong, practical bags for work, travel, and everyday use.",
+    "noteLines": ["Ready for", "the road"],
+    "meta": "Canvas bags"
+  }
+}

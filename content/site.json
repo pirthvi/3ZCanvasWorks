@@ -1,0 +1,40 @@
+{
+  "themeColor": "#f4eee4",
+  "htmlLanguage": "en",
+  "logoImage": "assets/images/brand/logor.svg",
+  "footerLogoImage": "assets/images/brand/logo-light.svg",
+  "faviconImage": "assets/images/brand/favicon.svg",
+  "shopName": "3Z Canvas Works",
+  "tagline": "Quality you can trust.",
+  "whatsappNumber": "+923473330209",
+  "orderPrefix": "3Z",
+  "currency": "PKR",
+  "locale": "en-PK",
+  "contactEmail": "",
+  "city": "",
+  "announcement": "Quality you can trust · Direct orders on WhatsApp",
+  "deliveryNote": "Delivery charges and availability are confirmed when we reply to your WhatsApp order.",
+  "header": {
+    "homeLinkLabel": "{shopName} home",
+    "allCategories": "All categories",
+    "categoryNavigationLabel": "Product categories",
+    "searchPlaceholder": "Search products",
+    "searchLabel": "Search products",
+    "cart": "Cart",
+    "cartAriaLabel": "Cart, {count} items",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "footer": {
+    "categoriesHeading": "Shop by category",
+    "helpHeading": "Need a hand?",
+    "helpText": "Ask about a product or delivery on WhatsApp.",
+    "whatsappLink": "Message us on WhatsApp",
+    "orderNote": "Product orders are confirmed in WhatsApp.",
+    "copyright": "© {year} {shopName}"
+  },
+  "productCard": {
+    "addToCart": "Add to cart",
+    "addedToCart": "Added to your cart."
+  }
+}

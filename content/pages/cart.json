@@ -1,0 +1,23 @@
+{
+  "metaTitle": "Your cart — {shopName}",
+  "metaDescription": "Review the items in your shopping cart.",
+  "homeBreadcrumb": "Home",
+  "kicker": "Your selection",
+  "title": "Shopping cart",
+  "emptyTitle": "Your cart is empty.",
+  "emptyDescription": "Take a look through our collections and add something useful.",
+  "browseCategories": "Browse categories",
+  "tableProduct": "Product",
+  "tableQuantity": "Quantity",
+  "tableTotal": "Total",
+  "decreaseQuantity": "Decrease quantity",
+  "increaseQuantity": "Increase quantity",
+  "removeItem": "Remove",
+  "summaryKicker": "Your order",
+  "summaryTitle": "Summary",
+  "subtotal": "Subtotal",
+  "shippingNote": "Shipping and availability will be confirmed in WhatsApp.",
+  "checkoutButton": "Continue to checkout",
+  "continueShopping": "Continue shopping",
+  "each": "each"
+}

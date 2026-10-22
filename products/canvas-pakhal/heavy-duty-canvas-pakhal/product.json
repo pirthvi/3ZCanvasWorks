@@ -1,0 +1,12 @@
+{
+  "id": "heavy-duty-canvas-pakhal",
+  "name": "Canvas Pakhal — Heavy Duty",
+  "category": "Canvas Pakhal",
+  "price": 7900,
+  "description": "A second sample pakhal listing for a heavier-duty option. Confirm the exact construction before launch.",
+  "details": "Sample listing · Add dimensions, capacity, construction, and final price.",
+  "image": "../../../assets/images/products/canvas-pakhal/heavy-duty-canvas-pakhal.svg",
+  "skuLabel": "· ",
+  "sku": "PAK-002",
+  "featured": false
+}

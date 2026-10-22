@@ -1,0 +1,11 @@
+{
+  "missingCatalogKicker": "Catalog data missing",
+  "missingCatalogTitle": "Generate the static catalog.",
+  "missingCatalogDescription": "After editing JSON files, double-click Update Site Data.bat, then reopen this page. No server is needed.",
+  "missingCategoryKicker": "Collection unavailable",
+  "missingCategoryTitle": "That category isn’t here.",
+  "missingProductKicker": "Product unavailable",
+  "missingProductTitle": "We couldn’t find that item.",
+  "browseCategories": "Browse all collections",
+  "continueShopping": "Continue shopping"
+}

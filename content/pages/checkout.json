@@ -1,0 +1,42 @@
+{
+  "metaTitle": "Checkout — {shopName}",
+  "metaDescription": "Enter delivery details for your 3Z Canvas Works order.",
+  "homeBreadcrumb": "Home",
+  "cartBreadcrumb": "Cart",
+  "kicker": "Almost there",
+  "title": "Checkout",
+  "emptyTitle": "Your cart is empty.",
+  "emptyDescription": "Add products to your cart before checkout.",
+  "browseCategories": "Browse categories",
+  "formKicker": "Delivery details",
+  "formTitle": "Where should we send it?",
+  "formNote": "No account needed. We’ll send your order details to our WhatsApp for confirmation.",
+  "fields": {
+    "name": "Full name",
+    "phone": "Phone number",
+    "city": "City",
+    "address": "Delivery address",
+    "note": "Order note",
+    "optional": "Optional",
+    "notePlaceholder": "Size, colour, or other request"
+  },
+  "submitButton": "Place order & open WhatsApp",
+  "formFootnote": "Placing the order downloads an order record to your device and opens a WhatsApp message. Your order is confirmed after you send the message and we reply.",
+  "summaryKicker": "Review your items",
+  "summaryTitle": "Order summary",
+  "subtotal": "Subtotal",
+  "editCart": "Edit cart",
+  "orderStatus": "WhatsApp confirmation pending",
+  "whatsappMessage": {
+    "title": "New order request — {shopName}",
+    "orderId": "Order: {orderId}",
+    "item": "• {name} × {quantity} — {lineTotal}",
+    "subtotal": "Subtotal: {subtotal}",
+    "name": "Name: {name}",
+    "phone": "Phone: {phone}",
+    "city": "City: {city}",
+    "address": "Address: {address}",
+    "note": "Note: {note}",
+    "closing": "Please confirm availability, delivery charges, and payment details."
+  }
+}

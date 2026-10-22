@@ -1,0 +1,12 @@
+{
+  "id": "reinforced-shop-curtain",
+  "name": "Reinforced Shop Curtain",
+  "category": "Shop Curtains",
+  "price": 6900,
+  "description": "A practical curtain panel for a workshop or shop entrance, with a reinforced top edge.",
+  "details": "Sample listing · Add width, height, material, colour, and final price.",
+  "image": "../../../assets/images/products/shop-curtains/reinforced-shop-curtain.svg",
+  "skuLabel": "· ",
+  "sku": "CUR-001",
+  "featured": true
+}

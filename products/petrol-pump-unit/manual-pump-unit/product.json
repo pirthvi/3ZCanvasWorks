@@ -1,0 +1,12 @@
+{
+  "id": "manual-pump-unit",
+  "name": "Petrol Pump Unit Canvas Cover — Standard",
+  "category": "Petrol Pump Unit Canvas Cover",
+  "price": 8500,
+  "description": "A tailored canvas cover for a petrol pump unit, shown here as a sample product listing.",
+  "details": "Sample listing · Add unit dimensions, canvas weight, colour, and final price.",
+  "image": "../../../assets/images/products/petrol-pump-unit-canvas-cover/manual-pump-unit.svg",
+  "skuLabel": "· ",
+  "sku": "PPU-001",
+  "featured": true
+}

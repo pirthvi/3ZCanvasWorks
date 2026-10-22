@@ -1,0 +1,11 @@
+{
+  "metaTitle": "{category} — {shopName}",
+  "metaDescription": "Browse the {category} collection from {shopName}.",
+  "homeBreadcrumb": "Home",
+  "kickerTemplate": "Collection / {number}",
+  "itemSingular": "item",
+  "itemPlural": "items",
+  "allCategories": "All categories",
+  "emptyTitle": "New items for this collection are coming soon.",
+  "emptyDescription": "Contact us on WhatsApp for availability."
+}

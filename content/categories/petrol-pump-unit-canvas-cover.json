@@ -1,0 +1,15 @@
+{
+  "name": "Petrol Pump Unit Canvas Cover",
+  "slug": "petrol-pump-unit-canvas-cover",
+  "description": "Browse canvas covers for petrol pump units. Message us with your measurements or requirements.",
+  "bannerImage": "assets/images/categories/category-banner.svg",
+  "home": {
+    "image": "assets/images/home/petrol-pump-unit-canvas-cover.svg",
+    "imageAlt": "Canvas cover for a petrol pump unit",
+    "title": "Made to cover",
+    "accent": "what keeps you moving.",
+    "description": "Canvas covers for petrol pump units, made to suit your measurements.",
+    "noteLines": ["Made to", "your size"],
+    "meta": "Custom canvas covers"
+  }
+}

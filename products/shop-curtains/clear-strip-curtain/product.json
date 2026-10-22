@@ -1,0 +1,12 @@
+{
+  "id": "clear-strip-curtain",
+  "name": "Clear Strip Curtain",
+  "category": "Shop Curtains",
+  "price": 7800,
+  "description": "A sample strip-curtain listing for separating areas while keeping visibility between them.",
+  "details": "Sample listing · Add strip thickness, panel dimensions, mounting, and final price.",
+  "image": "../../../assets/images/products/shop-curtains/clear-strip-curtain.svg",
+  "skuLabel": "· ",
+  "sku": "CUR-002",
+  "featured": false
+}

@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "title": "Canvas goods and equipment",
+    "description": "Shop canvas bags, petrol pump unit covers, shop curtains, tents, and pakhal from 3Z Canvas Works."
+  },
+  "carousel": {
+    "ariaLabel": "Featured collections",
+    "slideLabel": "{number} of {total}: {category}",
+    "counter": "{number} / {category}",
+    "customOrders": "Custom orders available",
+    "previous": "Previous collection",
+    "next": "Next collection",
+    "dotLabel": "Show {category} slide",
+    "shopButtonTemplate": "Shop {category}",
+    "bottomLeft": "Practical pieces. Honest materials.",
+    "bottomRight": "Scroll to explore"
+  },
+  "collections": {
+    "kicker": "Browse the shop",
+    "heading": "Find what you",
+    "headingAccent": "need.",
+    "description": "Five collections for work, home, and the road ahead.",
+    "tileCount": "{number} / Collection",
+    "tileAction": "Explore collection"
+  },
+  "search": {
+    "headingTemplate": "Search results for “{query}”",
+    "title": "Found in the shop",
+    "browseCategories": "Browse categories",
+    "empty": "No matching items. Try a different search."
+  },
+  "popular": {
+    "kicker": "A little of everything",
+    "title": "Popular picks",
+    "browse": "Browse all categories"
+  },
+  "whatsappBand": {
+    "kicker": "Need something specific?",
+    "title": "Let’s find the right fit.",
+    "description": "Send us your question or ask about custom sizes and availability.",
+    "button": "Chat on WhatsApp"
+  }
+}
