@@ -104,10 +104,22 @@
   }
   function total(items = cartItems()) { return items.reduce((sum, item) => sum + item.product.price * item.quantity, 0); }
   function itemCount() { return cartItems().reduce((sum, item) => sum + item.quantity, 0); }
-  function showToast(message) {
-    const toast = $(".toast"); if (!toast) return;
-    toast.textContent = message; toast.classList.add("is-visible");
-    clearTimeout(showToast.timeout); showToast.timeout = setTimeout(() => toast.classList.remove("is-visible"), 2600);
+  function showCartAdded(product, quantity) {
+    const copy = content.product;
+    let dialog = $("#cart-added-dialog");
+    if (!dialog) {
+      dialog = document.createElement("dialog");
+      dialog.className = "cart-added-dialog";
+      dialog.id = "cart-added-dialog";
+      dialog.setAttribute("aria-labelledby", "cart-added-title");
+      dialog.addEventListener("click", (event) => {
+        if (event.target === dialog || event.target.closest("[data-dismiss]")) dialog.close();
+      });
+      document.body.append(dialog);
+    }
+    dialog.innerHTML = `<div class="cart-added-panel"><button class="cart-added-close" type="button" data-dismiss aria-label="${text(copy.closePopup)}">×</button><div class="cart-added-item"><img src="${escapeHtml(assetUrl(product.imageUrl))}" alt="" /><span><strong id="cart-added-title">${text(copy.addedToCartTitle)}</strong><small>${text(copy.addedToCartMessage, { product: product.name, quantity })}</small></span></div><div class="cart-added-actions"><a class="button button-brown" href="${withCart("cart.html")}">${text(copy.viewCart)}</a><button class="button button-light" type="button" data-dismiss>${text(copy.continueShopping)}</button></div></div>`;
+    if (typeof dialog.showModal === "function") dialog.showModal();
+    else dialog.setAttribute("open", "");
   }
   function setPageMetadata(title, description) {
     document.title = title;
@@ -155,7 +167,7 @@
   function wireAddButtons(root = document) {
     $$('[data-add]', root).forEach((button) => button.addEventListener("click", () => {
       const cart = readCart(); cart[button.dataset.add] = (Number(cart[button.dataset.add]) || 0) + 1;
-      saveCart(cart); updateCartBadge(); showToast(config.productCard.addedToCart);
+      saveCart(cart); updateCartBadge(); showCartAdded(products.find((product) => product.id === button.dataset.add), 1);
     }));
   }
   function categoryTiles(copy) {
@@ -213,7 +225,7 @@
     }).join("");
     const dots = categories.map((category, index) => `<button type="button" class="carousel-dot${index === 0 ? " is-active" : ""}" data-go-to="${index}" aria-label="${text(copy.carousel.dotLabel, { category: category.name })}" aria-pressed="${index === 0 ? "true" : "false"}"></button>`).join("");
     main.innerHTML = `<section class="home-hero" aria-label="${text(copy.carousel.ariaLabel)}"><div class="carousel-track">${slides}</div><div class="carousel-controls"><button type="button" class="carousel-arrow" data-direction="-1" aria-label="${text(copy.carousel.previous)}">‹</button><div class="carousel-dots">${dots}</div><button type="button" class="carousel-arrow" data-direction="1" aria-label="${text(copy.carousel.next)}">›</button></div><div class="hero-bottom-line"><span>${text(copy.carousel.bottomLeft)}</span><span>${text(copy.carousel.bottomRight)} ↓</span></div></section>
-      <section class="collections section-wrap" id="collections"><div class="section-heading"><div><p class="kicker">${text(copy.collections.kicker)}</p><h2>${text(copy.collections.heading)} <em>${text(copy.collections.headingAccent)}</em></h2></div><p>${text(copy.collections.description)}</p></div><div class="category-grid">${categoryTiles(copy.collections)}</div></section>${productSection}<section class="whatsapp-band"><div class="whatsapp-icon" aria-hidden="true">↗</div><div><p class="kicker">${text(copy.whatsappBand.kicker)}</p><h2>${text(copy.whatsappBand.title)}</h2><p>${text(copy.whatsappBand.description)}</p></div><a class="button button-light" href="https://wa.me/${String(config.whatsappNumber).replace(/\D/g, "")}" target="_blank" rel="noopener noreferrer">${text(copy.whatsappBand.button)} <span aria-hidden="true">↗</span></a></section>`;
+      ${productSection}<section class="collections section-wrap" id="collections"><div class="section-heading"><div><p class="kicker">${text(copy.collections.kicker)}</p><h2>${text(copy.collections.heading)} <em>${text(copy.collections.headingAccent)}</em></h2></div><p>${text(copy.collections.description)}</p></div><div class="category-grid">${categoryTiles(copy.collections)}</div></section><section class="whatsapp-band"><div class="whatsapp-icon" aria-hidden="true">↗</div><div><p class="kicker">${text(copy.whatsappBand.kicker)}</p><h2>${text(copy.whatsappBand.title)}</h2><p>${text(copy.whatsappBand.description)}</p></div><a class="button button-light" href="https://wa.me/${String(config.whatsappNumber).replace(/\D/g, "")}" target="_blank" rel="noopener noreferrer">${text(copy.whatsappBand.button)} <span aria-hidden="true">↗</span></a></section>`;
     initCarousel();
     wireAddButtons(main);
   }
@@ -247,7 +259,32 @@
     $("#pdp-add").addEventListener("click", () => {
       const cart = readCart(); const quantity = Number($("#pdp-quantity").value) || 1;
       cart[product.id] = (Number(cart[product.id]) || 0) + quantity;
-      saveCart(cart); updateCartBadge(); showToast(content.product.addedToCart || config.productCard.addedToCart);
+      saveCart(cart); updateCartBadge(); showCartAdded(product, quantity);
+    });
+    const buyNow = document.createElement("button");
+    buyNow.className = "button button-pdp-primary pdp-buy-now";
+    buyNow.type = "button";
+    buyNow.innerHTML = `${text(copy.buyNow)} <span aria-hidden="true">→</span>`;
+    const addToCart = $("#pdp-add");
+    addToCart.classList.remove("button-brown");
+    addToCart.classList.add("button-pdp-secondary");
+    $(".pdp-actions").insertAdjacentElement("afterend", buyNow);
+    buyNow.addEventListener("click", () => {
+      const cart = readCart(); const quantity = Number($("#pdp-quantity").value) || 1;
+      cart[product.id] = (Number(cart[product.id]) || 0) + quantity;
+      saveCart(cart); location.href = withCart("checkout.html");
+    });
+    const whatsappOrder = $(".pdp-chat");
+    const whatsappDivider = document.createElement("div");
+    whatsappDivider.className = "pdp-order-divider";
+    whatsappDivider.innerHTML = `<span>${text(copy.whatsappOrderDivider)}</span>`;
+    whatsappOrder.insertAdjacentElement("beforebegin", whatsappDivider);
+    whatsappOrder.classList.add("button", "button-whatsapp", "pdp-whatsapp");
+    whatsappOrder.innerHTML = `${text(copy.orderOnWhatsApp)} <span aria-hidden="true">↗</span>`;
+    whatsappOrder.addEventListener("click", () => {
+      const quantity = Number($("#pdp-quantity").value) || 1;
+      const message = format(copy.whatsappOrderTemplate, { product: product.name, quantity, price: money(product.price * quantity) });
+      whatsappOrder.href = `https://wa.me/${String(config.whatsappNumber).replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
     });
     wireAddButtons(main);
   }
