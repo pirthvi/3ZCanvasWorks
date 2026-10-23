@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://3zcanvasworks.pirthvi2016.workers.dev/sitemap.xml

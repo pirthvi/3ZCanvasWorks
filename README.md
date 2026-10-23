@@ -8,6 +8,20 @@ Open `index.html` in a browser. After editing any JSON source, double-click `Upd
 
 The browser reads the generated `site-data.js` bundle. The editable source of all site copy and settings stays in JSON. Generating the bundle keeps the site compatible with `file://` browsing, where browsers block JavaScript from fetching local JSON files.
 
+## Google Search
+
+The update script also generates a separate static HTML page for every category and product, adds canonical URLs and product structured data, and writes `robots.txt` and `sitemap.xml` in the website root. Product and category pages include readable content in their initial HTML so search crawlers do not have to rely only on JavaScript.
+
+Before deploying:
+
+1. In `content/site.json`, set `siteUrl` to the exact public HTTPS address you want Google to index. It currently uses the Cloudflare Workers URL from the project setup. If you connect a custom domain, use that domain instead.
+2. Double-click `Update Site Data.bat` to rebuild the static routes and sitemap, then push the generated files and wait for Cloudflare to deploy them.
+3. Add the public site to Google Search Console. Put its HTML verification token in `googleSiteVerification` in `content/site.json`, rebuild and deploy, then finish verification in Search Console. With a custom domain, DNS TXT verification is another option.
+4. Submit `https://YOUR-SITE/sitemap.xml` in Search Console and use URL Inspection to request crawling for the home page and a few product pages.
+5. Replace all sample product details with accurate product names, descriptions, specifications, prices, and images before requesting indexing.
+
+Google decides which pages to index and where they rank; a sitemap and Search Console submission help discovery but cannot guarantee a listing or position.
+
 ## Where to edit content
 
 - `content/site.json`: shop name, logo paths, WhatsApp number, currency, announcement, header, footer, and shared labels.
