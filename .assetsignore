@@ -1,0 +1,9 @@
+.git/
+.wrangler/
+content/
+products/
+*.ps1
+*.bat
+README.md
+wrangler.jsonc
+.assetsignore
