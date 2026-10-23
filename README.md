@@ -8,6 +8,12 @@ Open `index.html` in a browser. After editing any JSON source, double-click `Upd
 
 The browser reads the generated `site-data.js` bundle. The editable source of all site copy and settings stays in JSON. Generating the bundle keeps the site compatible with `file://` browsing, where browsers block JavaScript from fetching local JSON files.
 
+## Deploy to Cloudflare Workers
+
+This is a static site. `wrangler.jsonc` tells Cloudflare to publish the files in the project root, including `sitemap.xml` and `robots.txt`.
+
+In the Worker’s **Settings → Builds**, leave the build command empty and set the production **Deploy command** to `npx wrangler deploy`. Keep the repository root as the root directory. Do not use `npx wrangler preview` as the production deploy command; that command is for preview deployments. The `v4_seo` branch should be selected if that is the branch you intend to publish.
+
 ## Google Search
 
 The update script also generates a separate static HTML page for every category and product, adds canonical URLs and product structured data, and writes `robots.txt` and `sitemap.xml` in the website root. Product and category pages include readable content in their initial HTML so search crawlers do not have to rely only on JavaScript.
