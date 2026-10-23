@@ -1,4 +1,4 @@
-# Build a file://-friendly JavaScript bundle from editable JSON sources.
+# Build the file://-friendly data bundle, indexable static routes, and sitemap from JSON sources.
 $ErrorActionPreference = 'Stop'
 $rootPath = (Resolve-Path $PSScriptRoot).Path
 $rootPrefix = $rootPath.TrimEnd('\') + '\'
@@ -92,3 +92,170 @@ window.STORE_PRODUCTS = $productsJson;
 "@
 [System.IO.File]::WriteAllText((Join-Path $rootPath 'site-data.js'), $source, [System.Text.UTF8Encoding]::new($false))
 Write-Host "Generated site-data.js from $($pages.Count) page files, $($categories.Count) categories, and $($products.Count) products."
+
+$siteUrl = ([string]$config.siteUrl).TrimEnd('/')
+if (-not $siteUrl.StartsWith('https://', [System.StringComparison]::OrdinalIgnoreCase)) {
+  throw 'Set content/site.json siteUrl to the public HTTPS website address before generating SEO pages.'
+}
+
+function Html([object]$value) {
+  return [System.Net.WebUtility]::HtmlEncode([string]$value)
+}
+
+function Absolute-SiteUrl([string]$path) {
+  return "$siteUrl/$($path.TrimStart('/'))"
+}
+
+function Json-Ld([object]$data) {
+  $json = ConvertTo-Json -InputObject $data -Depth 50 -Compress
+  return $json.Replace('</script', '<\/script')
+}
+
+function Write-SearchPage([string]$relativePath, [string]$page, [string]$title, [string]$description, [string]$canonical, [string]$image, [string]$bodyAttributes, [string]$mainHtml, [object]$schema) {
+  $safeTitle = Html $title
+  $safeDescription = Html $description
+  $safeCanonical = Html $canonical
+  $safeImage = Html $image
+  $safeLanguage = Html ([string]$config.htmlLanguage)
+  $safeTheme = Html ([string]$config.themeColor)
+  $safeIcon = Html ([string]$config.faviconImage)
+  $safeVerification = Html ([string]$config.googleSiteVerification)
+  $verificationMeta = if ($safeVerification) { "    <meta name=`"google-site-verification`" content=`"$safeVerification`" />`n" } else { '' }
+  $safeIconType = switch ([System.IO.Path]::GetExtension([string]$config.faviconImage).ToLowerInvariant()) {
+    '.png' { 'image/png'; break }
+    '.jpg' { 'image/jpeg'; break }
+    '.jpeg' { 'image/jpeg'; break }
+    '.webp' { 'image/webp'; break }
+    default { 'image/svg+xml' }
+  }
+  $schemaJson = Json-Ld $schema
+  $html = @"
+<!doctype html>
+<html lang="$safeLanguage">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="$safeTheme" />
+    <meta name="description" content="$safeDescription" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    $verificationMeta<link rel="canonical" href="$safeCanonical" />
+    <meta property="og:site_name" content="$(Html ([string]$config.shopName))" />
+    <meta property="og:title" content="$safeTitle" />
+    <meta property="og:description" content="$safeDescription" />
+    <meta property="og:type" content="$(if ($page -eq 'product') { 'product' } else { 'website' })" />
+    <meta property="og:url" content="$safeCanonical" />
+    <meta property="og:image" content="$safeImage" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>$safeTitle</title>
+    <link rel="icon" type="$safeIconType" href="$safeIcon" />
+    <link rel="stylesheet" href="store.css" />
+    <script type="application/ld+json">$schemaJson</script>
+  </head>
+  <body $bodyAttributes>
+    <div id="site-header"></div>
+    <main id="page-main">$mainHtml</main>
+    <div id="site-footer"></div>
+    <div class="toast" role="status" aria-live="polite"></div>
+    <script src="site-data.js"></script>
+    <script src="store.js" defer></script>
+  </body>
+</html>
+"@
+  $targetPath = Join-Path $rootPath $relativePath
+  [System.IO.File]::WriteAllText($targetPath, $html, [System.Text.UTF8Encoding]::new($false))
+}
+
+$homePageData = $pages.home
+$homeUrl = "$siteUrl/"
+$homeImage = Absolute-SiteUrl ([string]$categories[0].home.image)
+$homeCategories = @(
+  foreach ($category in $categories) {
+    $categoryHref = "category-$($category.slug).html"
+    "<a class=`"category-tile`" href=`"$(Html $categoryHref)`"><img src=`"$(Html $category.home.image)`" alt=`"$(Html $category.home.imageAlt)`" /><span class=`"category-tile-copy`"><strong>$(Html $category.name)</strong><span>$(Html $homePageData.collections.tileAction)</span></span></a>"
+  }
+) -join "`n"
+$featuredProducts = @($products | Where-Object { $_.featured } | Select-Object -First 4)
+$homeProducts = @(
+  foreach ($product in $featuredProducts) {
+    $productHref = "product-$($product.id).html"
+    $priceText = ([decimal]$product.price).ToString('N0', [System.Globalization.CultureInfo]::GetCultureInfo('en-US'))
+    "<article class=`"product-card`"><a class=`"product-card-image`" href=`"$(Html $productHref)`"><img src=`"$(Html $product.imageUrl)`" alt=`"$(Html $product.imageAlt)`" /></a><div class=`"product-card-content`"><a class=`"product-card-title`" href=`"$(Html $productHref)`">$(Html $product.name)</a><p class=`"product-card-desc`">$(Html $product.description)</p><strong>$(Html $config.currency) $priceText</strong></div></article>"
+  }
+) -join "`n"
+$homeFallback = @"
+<section class="home-hero"><div class="hero-copy"><p class="kicker">$(Html $config.shopName)</p><h1>$(Html $homePageData.meta.title)</h1><p>$(Html $homePageData.meta.description)</p><a class="button button-brown" href="#collections">$(Html $homePageData.collections.kicker)</a></div></section>
+<section class="collections section-wrap" id="collections"><div class="section-heading"><h2>$(Html $homePageData.collections.heading) $(Html $homePageData.collections.headingAccent)</h2></div><div class="category-grid">$homeCategories</div></section>
+<section class="home-products section-wrap"><div class="section-heading"><h2>$(Html $homePageData.popular.title)</h2></div><div class="product-grid">$homeProducts</div></section>
+"@
+$organization = [ordered]@{
+  '@type' = 'Organization'
+  '@id' = "$siteUrl/#organization"
+  name = [string]$config.shopName
+  url = $homeUrl
+  logo = Absolute-SiteUrl ([string]$config.logoImage)
+  areaServed = 'Pakistan'
+  contactPoint = @{ '@type' = 'ContactPoint'; telephone = [string]$config.whatsappNumber; contactType = 'sales'; areaServed = 'PK' }
+}
+$website = [ordered]@{ '@type' = 'WebSite'; '@id' = "$siteUrl/#website"; name = [string]$config.shopName; url = $homeUrl; publisher = @{ '@id' = "$siteUrl/#organization" }; inLanguage = [string]$config.htmlLanguage }
+$homeSchema = @{ '@context' = 'https://schema.org'; '@graph' = @($organization, $website) }
+Write-SearchPage 'index.html' 'home' ([string]$homePageData.meta.title) ([string]$homePageData.meta.description) $homeUrl $homeImage 'data-page="home"' $homeFallback $homeSchema
+
+$sitemapUrls = [System.Collections.Generic.List[string]]::new()
+$sitemapUrls.Add($homeUrl)
+foreach ($category in $categories) {
+  $categoryUrl = Absolute-SiteUrl "category-$($category.slug).html"
+  $categoryProducts = @($products | Where-Object { $_.category -eq $category.name })
+  $categoryCards = @(
+    foreach ($product in $categoryProducts) {
+      $productHref = "product-$($product.id).html"
+      $priceText = ([decimal]$product.price).ToString('N0', [System.Globalization.CultureInfo]::GetCultureInfo('en-US'))
+      "<article class=`"product-card`"><a class=`"product-card-image`" href=`"$(Html $productHref)`"><img src=`"$(Html $product.imageUrl)`" alt=`"$(Html $product.imageAlt)`" /></a><div class=`"product-card-content`"><a class=`"product-card-title`" href=`"$(Html $productHref)`">$(Html $product.name)</a><p class=`"product-card-desc`">$(Html $product.description)</p><strong>$(Html $config.currency) $priceText</strong></div></article>"
+    }
+  ) -join "`n"
+  $categoryPage = $pages.category
+  $categoryFallback = "<section class=`"category-hero`" style=`"--category-banner-image:url('$(Html $category.bannerImage)')`"><div class=`"breadcrumbs`"><a href=`"index.html`">$(Html $categoryPage.homeBreadcrumb)</a><span>&gt;</span>$(Html $category.name)</div><h1>$(Html $category.name)</h1><p>$(Html $category.description)</p></section><section class=`"category-products section-wrap`"><div class=`"product-grid`">$categoryCards</div></section>"
+  $categoryTitle = ([string]$categoryPage.metaTitle).Replace('{category}', [string]$category.name).Replace('{shopName}', [string]$config.shopName)
+  $categoryDescription = ([string]$categoryPage.metaDescription).Replace('{category}', [string]$category.name).Replace('{shopName}', [string]$config.shopName)
+  $breadcrumb = @{ '@type' = 'BreadcrumbList'; itemListElement = @(@{ '@type' = 'ListItem'; position = 1; name = [string]$categoryPage.homeBreadcrumb; item = $homeUrl }, @{ '@type' = 'ListItem'; position = 2; name = [string]$category.name; item = $categoryUrl }) }
+  $itemList = @(
+    for ($index = 0; $index -lt $categoryProducts.Count; $index++) {
+      $product = $categoryProducts[$index]
+      @{ '@type' = 'ListItem'; position = $index + 1; name = [string]$product.name; url = (Absolute-SiteUrl "product-$($product.id).html") }
+    }
+  )
+  $collectionSchema = @{ '@context' = 'https://schema.org'; '@graph' = @(@{ '@type' = 'CollectionPage'; name = [string]$category.name; description = [string]$category.description; url = $categoryUrl; mainEntity = @{ '@type' = 'ItemList'; itemListElement = $itemList } }, $breadcrumb) }
+  Write-SearchPage "category-$($category.slug).html" 'category' $categoryTitle $categoryDescription $categoryUrl (Absolute-SiteUrl ([string]$category.bannerImage)) "data-page=`"category`" data-category-slug=`"$(Html $category.slug)`"" $categoryFallback $collectionSchema
+  $sitemapUrls.Add($categoryUrl)
+}
+
+foreach ($product in $products) {
+  $productUrl = Absolute-SiteUrl "product-$($product.id).html"
+  $category = $categories | Where-Object { $_.name -eq $product.category } | Select-Object -First 1
+  $productPage = $pages.product
+  $productTitle = ([string]$productPage.metaTitle).Replace('{product}', [string]$product.name).Replace('{shopName}', [string]$config.shopName)
+  $productDescription = [string]$product.description
+  $productImage = Absolute-SiteUrl ([string]$product.imageUrl)
+  $priceText = ([decimal]$product.price).ToString('N0', [System.Globalization.CultureInfo]::GetCultureInfo('en-US'))
+  $orderMessage = ([string]$productPage.whatsappOrderTemplate).Replace('{product}', [string]$product.name).Replace('{quantity}', '1').Replace('{price}', "$($config.currency) $priceText")
+  $waMessage = [System.Uri]::EscapeDataString($orderMessage)
+  $productFallback = "<section class=`"pdp section-wrap`"><div class=`"breadcrumbs`"><a href=`"index.html`">$(Html $productPage.homeBreadcrumb)</a><span>&gt;</span><a href=`"category-$($category.slug).html`">$(Html $product.category)</a></div><div class=`"pdp-layout`"><div class=`"pdp-image`"><img src=`"$(Html $product.imageUrl)`" alt=`"$(Html $product.imageAlt)`" /></div><div class=`"pdp-info`"><p class=`"kicker`">$(Html $product.category)</p><h1>$(Html $product.name)</h1><p class=`"pdp-price`">$(Html $config.currency) $priceText</p><p class=`"pdp-description`">$(Html $product.description)</p><p>$(Html $product.details)</p><a class=`"button button-whatsapp`" href=`"https://wa.me/$($config.whatsappNumber -replace '\D','')?text=$waMessage`">$(Html $productPage.orderOnWhatsApp)</a></div></div></section>"
+  $productCrumb = @{ '@type' = 'BreadcrumbList'; itemListElement = @(@{ '@type' = 'ListItem'; position = 1; name = [string]$productPage.homeBreadcrumb; item = $homeUrl }, @{ '@type' = 'ListItem'; position = 2; name = [string]$category.name; item = (Absolute-SiteUrl "category-$($category.slug).html") }, @{ '@type' = 'ListItem'; position = 3; name = [string]$product.name; item = $productUrl }) }
+  $offer = @{ '@type' = 'Offer'; url = $productUrl; priceCurrency = [string]$config.currency; price = [string]$product.price; seller = @{ '@type' = 'Organization'; name = [string]$config.shopName } }
+  $productEntity = [ordered]@{ '@type' = 'Product'; name = [string]$product.name; description = $productDescription; image = @($productImage); brand = @{ '@type' = 'Brand'; name = [string]$config.shopName }; offers = $offer }
+  if (-not [string]::IsNullOrWhiteSpace([string]$product.sku)) { $productEntity.sku = [string]$product.sku }
+  $productSchema = @{ '@context' = 'https://schema.org'; '@graph' = @($productEntity, $productCrumb) }
+  Write-SearchPage "product-$($product.id).html" 'product' $productTitle $productDescription $productUrl $productImage "data-page=`"product`" data-product-id=`"$(Html $product.id)`"" $productFallback $productSchema
+  $sitemapUrls.Add($productUrl)
+}
+
+$today = [System.DateTime]::UtcNow.ToString('yyyy-MM-dd')
+$urlXml = @(
+  foreach ($url in $sitemapUrls) {
+    "  <url><loc>$([System.Security.SecurityElement]::Escape($url))</loc><lastmod>$today</lastmod></url>"
+  }
+) -join "`n"
+$sitemap = "<?xml version=`"1.0`" encoding=`"UTF-8`"?>`n<urlset xmlns=`"http://www.sitemaps.org/schemas/sitemap/0.9`">`n$urlXml`n</urlset>`n"
+[System.IO.File]::WriteAllText((Join-Path $rootPath 'sitemap.xml'), $sitemap, [System.Text.UTF8Encoding]::new($false))
+$robots = "User-agent: *`nAllow: /`nSitemap: $siteUrl/sitemap.xml`n"
+[System.IO.File]::WriteAllText((Join-Path $rootPath 'robots.txt'), $robots, [System.Text.UTF8Encoding]::new($false))
+Write-Host "Generated $($sitemapUrls.Count) crawlable pages, sitemap.xml, and robots.txt for $siteUrl."

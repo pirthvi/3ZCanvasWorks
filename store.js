@@ -26,9 +26,9 @@
   function categoryBySlug(slug) { return categories.find((category) => category.slug === slug); }
   function categoryHref(category) {
     const item = typeof category === "string" ? categories.find((entry) => entry.name === category) : category;
-    return item ? withCart(`category.html?category=${encodeURIComponent(item.slug)}`) : withCart("index.html");
+    return item ? withCart(`category-${encodeURIComponent(item.slug)}.html`) : withCart("index.html");
   }
-  function productHref(product) { return withCart(`product.html?id=${encodeURIComponent(product.id)}`); }
+  function productHref(product) { return withCart(`product-${encodeURIComponent(product.id)}.html`); }
   function encodePayload(value) {
     const bytes = new TextEncoder().encode(value);
     let binary = "";
@@ -130,6 +130,31 @@
     if (themeTag) themeTag.content = config.themeColor || "";
     if (iconTag) iconTag.href = assetUrl(config.faviconImage);
     document.documentElement.lang = config.htmlLanguage || "en";
+    const pageName = document.body.dataset.page;
+    const categorySlug = document.body.dataset.categorySlug || new URLSearchParams(location.search).get("category");
+    const productId = document.body.dataset.productId || new URLSearchParams(location.search).get("id");
+    const route = pageName === "category" && categorySlug ? `category-${categorySlug}.html`
+      : pageName === "product" && productId ? `product-${productId}.html`
+      : pageName === "home" ? "" : location.pathname.split("/").pop();
+    const baseUrl = String(config.siteUrl || location.origin).replace(/\/+$/, "");
+    const canonicalUrl = `${baseUrl}/${route}`;
+    let canonical = $('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement("link"); canonical.rel = "canonical"; document.head.append(canonical); }
+    canonical.href = canonicalUrl;
+    const upsertMeta = (selector, attributes, value) => {
+      let tag = $(selector);
+      if (!tag) { tag = document.createElement("meta"); Object.entries(attributes).forEach(([key, item]) => tag.setAttribute(key, item)); document.head.append(tag); }
+      tag.content = value || "";
+    };
+    upsertMeta('meta[property="og:title"]', { property: "og:title" }, title);
+    upsertMeta('meta[property="og:description"]', { property: "og:description" }, description);
+    upsertMeta('meta[property="og:url"]', { property: "og:url" }, canonicalUrl);
+    upsertMeta('meta[property="og:type"]', { property: "og:type" }, pageName === "product" ? "product" : "website");
+    const noindex = pageName === "cart" || pageName === "checkout"
+      || (pageName === "home" && new URLSearchParams(location.search).has("search"))
+      || (pageName === "category" && !document.body.dataset.categorySlug)
+      || (pageName === "product" && !document.body.dataset.productId);
+    upsertMeta('meta[name="robots"]', { name: "robots" }, noindex ? "noindex,follow" : "index,follow,max-image-preview:large");
   }
 
   function header() {
@@ -239,7 +264,7 @@
   }
   function renderCategory() {
     const copy = content.category;
-    const category = categoryBySlug(new URLSearchParams(location.search).get("category") || "");
+    const category = categoryBySlug(document.body.dataset.categorySlug || new URLSearchParams(location.search).get("category") || "");
     if (!category) { setPageMetadata(format(copy.metaTitle, { category: "", shopName: config.shopName }), ""); renderNotFound("category"); return; }
     const list = products.filter((product) => product.category === category.name);
     setPageMetadata(format(copy.metaTitle, { category: category.name, shopName: config.shopName }), format(copy.metaDescription, { category: category.name, shopName: config.shopName }));
@@ -250,7 +275,7 @@
   }
   function renderProduct() {
     const copy = content.product;
-    const product = products.find((item) => item.id === new URLSearchParams(location.search).get("id"));
+    const product = products.find((item) => item.id === (document.body.dataset.productId || new URLSearchParams(location.search).get("id")));
     if (!product) { setPageMetadata(format(copy.metaTitle, { product: "", shopName: config.shopName }), ""); renderNotFound("product"); return; }
     setPageMetadata(format(copy.metaTitle, { product: product.name, shopName: config.shopName }), product.description);
     const category = categories.find((item) => item.name === product.category);
